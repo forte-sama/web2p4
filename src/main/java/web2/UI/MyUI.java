@@ -1,17 +1,18 @@
 package web2.UI;
 
 import com.vaadin.annotations.Theme;
-import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
-import com.vaadin.server.VaadinServlet;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import web2.servicios.MailService;
 
-import javax.servlet.annotation.WebServlet;
-
-@SpringUI(path = "/holamundo")
+@SpringUI(path = "/")
 @Theme("valo")
 public class MyUI extends UI {
+    @Autowired
+    private MailService servicioMail;
+
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         TextField tfield = new TextField("Hello IntelliJ IDEA");
@@ -20,7 +21,8 @@ public class MyUI extends UI {
         button.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                Notification.show("Prueba", Notification.Type.HUMANIZED_MESSAGE);
+                servicioMail.enviarMensaje();
+                Notification.show("Mensaje enviado?", Notification.Type.HUMANIZED_MESSAGE);
             }
         });
 

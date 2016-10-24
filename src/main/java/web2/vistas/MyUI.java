@@ -1,4 +1,4 @@
-package web2.UI;
+package web2.vistas;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
@@ -7,7 +7,9 @@ import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import web2.servicios.MailService;
 
-@SpringUI(path = "/")
+import java.util.Locale;
+
+@SpringUI(path = "/myui")
 @Theme("valo")
 public class MyUI extends UI {
     @Autowired
@@ -26,11 +28,19 @@ public class MyUI extends UI {
             }
         });
 
+        Calendar calendario = new Calendar();
+        calendario.setLocale(Locale.US);
+        calendario.setFirstVisibleDayOfWeek(2);
+        calendario.setLastVisibleDayOfWeek(6);
+        calendario.setFirstVisibleHourOfDay(8);
+        calendario.setLastVisibleHourOfDay(17);
+
         VerticalLayout layout = new VerticalLayout();
         layout.setMargin(true);
         layout.setSpacing(true);
         layout.addComponent(tfield);
         layout.addComponent(button);
+        layout.addComponent(calendario);
 
         setContent(layout);
     }

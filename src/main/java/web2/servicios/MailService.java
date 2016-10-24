@@ -27,5 +27,4 @@ public class MailService {
             System.out.println("Hubo un errorsito tratando de enviar correo");
         }
     }
-
 }

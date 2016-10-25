@@ -5,7 +5,7 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import web2.servicios.MailService;
+import web2.servicios.ServicioCorreos;
 
 import java.util.Locale;
 
@@ -13,7 +13,7 @@ import java.util.Locale;
 @Theme("valo")
 public class MyUI extends UI {
     @Autowired
-    private MailService servicioMail;
+    private ServicioCorreos servicioMail;
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {

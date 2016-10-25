@@ -6,8 +6,8 @@ import javax.persistence.Id;
 @Entity
 public class Usuario {
     @Id
-    String email;
-    String nombreCompleto;
+    private String email;
+    private String nombreCompleto;
 
     //constructors
     public Usuario() { }

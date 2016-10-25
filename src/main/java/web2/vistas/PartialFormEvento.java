@@ -1,38 +1,44 @@
 package web2.vistas;
 
-import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.event.ShortcutAction;
+import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import web2.modelos.Usuario;
-import web2.servicios.ServicioUsuarios;
+import web2.modelos.Evento;
+import web2.servicios.ServicioEventos;
 
 @Component
 @UIScope
 public class PartialFormEvento extends FormLayout {
 
     @Autowired
-    private ServicioUsuarios servicioUsuarios;
+    private ServicioEventos servicioEventos;
 
-    private TextField email   = new TextField("Titulo");
-    private TextField nombre  = new TextField("Desc");
-    private Button btnGuardar = new Button("E Guardar");
-    private Button btnSalir   = new Button("E Salir");
+    private TextField titulo      = new TextField("Titulo");
+    private TextField descripcion = new TextField("Desc");
+    private DateField inicio      = new DateField("Inicio");
+    private DateField fin         = new DateField("Fin");
+    private Button btnGuardar     = new Button("E Guardar");
+    private Button btnSalir       = new Button("E Salir");
 
     public PartialFormEvento() {
         setSizeUndefined();
 
-        email.addValidator(new EmailValidator("Debe ser email valido"));
-        nombre.setNullRepresentation("");
-        nombre.setNullSettingAllowed(false);
+        inicio.setResolution(Resolution.HOUR);
+        fin.setResolution(Resolution.HOUR);
+
+        titulo.setNullRepresentation("");
+        titulo.setNullSettingAllowed(false);
+        descripcion.setNullRepresentation("");
+        descripcion.setNullSettingAllowed(false);
 
         HorizontalLayout buttons = new HorizontalLayout(btnGuardar, btnSalir);
         buttons.setSpacing(true);
 
         //Incluyendo los botones
-        addComponents(email,nombre,buttons);
+        addComponents(titulo, descripcion, inicio, fin, buttons);
 
         btnGuardar.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         btnGuardar.addClickListener(new Button.ClickListener() {
@@ -50,10 +56,32 @@ public class PartialFormEvento extends FormLayout {
     }
 
     private void guardar() {
-        ;
+        //chequear si choca con algun evento del dia
+        //chequear fin es luego de inicio
+        if(true && true) {
+            //crear objeto
+            Evento e = new Evento();
+            e.setCaption(titulo.getValue());
+            e.setDescription(descripcion.getValue());
+            e.setStart(inicio.getValue());
+            e.setEnd(fin.getValue());
+
+            //persistir objeto
+            servicioEventos.guardar(e);
+            //propagar cambio
+
+
+            Notification.show("Evento Agregado", Notification.Type.HUMANIZED_MESSAGE);
+        }
+        else {
+            Notification.show("Hubo un error", Notification.Type.WARNING_MESSAGE);
+        }
     }
 
     private void salir() {
+        titulo.setValue("");
+        descripcion.setValue("");
+
         setVisible(false);
     }
 }

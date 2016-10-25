@@ -6,7 +6,7 @@ import java.io.IOException;
 
 
 @Service
-public class MailService {
+public class ServicioCorreos {
     public void enviarMensaje() {
         Email from = new Email("estudiante_de_camacho@clasewebavanzada.jodio");
         String subject = "Prueba";

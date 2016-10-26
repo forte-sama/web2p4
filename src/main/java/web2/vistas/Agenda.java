@@ -1,6 +1,7 @@
 package web2.vistas;
 
 import com.vaadin.annotations.Theme;
+import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
@@ -8,12 +9,11 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.Calendar;
 import com.vaadin.ui.components.calendar.CalendarComponentEvents;
 import com.vaadin.ui.components.calendar.event.BasicEvent;
-import com.vaadin.ui.components.calendar.event.CalendarEvent;
-import com.vaadin.ui.components.calendar.event.CalendarEventProvider;
-import org.hibernate.event.spi.EventSource;
+import com.vaadin.ui.components.calendar.event.EditableCalendarEvent;
+import com.vaadin.ui.components.calendar.handler.BasicEventMoveHandler;
+import com.vaadin.ui.components.calendar.handler.BasicEventResizeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import web2.modelos.Evento;
-import web2.otro.MyEventProvider;
 import web2.servicios.ServicioEventos;
 import web2.servicios.ServicioUsuarios;
 
@@ -44,18 +44,13 @@ public class Agenda extends UI {
         agenda = new Calendar();
         agenda.setLocale(Locale.US);
         agenda.setFirstVisibleDayOfWeek(2);
-        agenda.setLastVisibleDayOfWeek(6);
+        agenda.setFirstVisibleHourOfDay(7);
+        agenda.setFirstVisibleHourOfDay(8);
+        agenda.setLastVisibleHourOfDay(17);
         agenda.setWidth("600px");
         agenda.setHeight("100%");
-        agenda.setEventProvider(new MyEventProvider(servicioEventos));
-
-        //pruebas con eventos
-//        GregorianCalendar start = new GregorianCalendar();
-//        GregorianCalendar end   = new GregorianCalendar();
-//        end.add(java.util.Calendar.HOUR, 2);
-//        agenda.addEvent(new BasicEvent("Calendar study",
-//                "Learning how to use Vaadin Calendar",
-//                start.getTime(), end.getTime()));
+        BeanItemContainer<Evento> contenedor = new BeanItemContainer<>(Evento.class,servicioEventos.getAll());
+        agenda.setContainerDataSource(contenedor);
 
         Button btnCredenciales = new Button("Manejo Credenciales", FontAwesome.LOCK);
         btnCredenciales.addClickListener(new Button.ClickListener() {
@@ -77,9 +72,20 @@ public class Agenda extends UI {
             }
         });
 
+        Button btnGuardar = new Button("Guardar Horario", FontAwesome.SAVE);
+        btnGuardar.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                for(Evento e : contenedor.getItemIds()) {
+                    servicioEventos.guardar(e);
+                }
+
+                Notification.show("Horario ha sido guardado", Notification.Type.HUMANIZED_MESSAGE);
+            }
+        });
+
         top.setSpacing(true);
-        top.addComponent(btnCredenciales);
-        top.addComponent(btnEventos);
+        top.addComponents(btnCredenciales,btnEventos,btnGuardar);
 
         middle.setSizeFull();
         middle.setSpacing(true);

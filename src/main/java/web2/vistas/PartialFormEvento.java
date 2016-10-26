@@ -20,8 +20,8 @@ public class PartialFormEvento extends FormLayout {
     private TextField descripcion = new TextField("Desc");
     private DateField inicio      = new DateField("Inicio");
     private DateField fin         = new DateField("Fin");
-    private Button btnGuardar     = new Button("E Guardar");
-    private Button btnSalir       = new Button("E Salir");
+    private Button btnGuardar     = new Button("Agregar Evento");
+    private Button btnSalir       = new Button("Salir");
 
     public PartialFormEvento() {
         setSizeUndefined();
@@ -69,8 +69,8 @@ public class PartialFormEvento extends FormLayout {
             //persistir objeto
             servicioEventos.guardar(e);
             //propagar cambio
-
-
+            //setear cron job para email
+            //notificar
             Notification.show("Evento Agregado", Notification.Type.HUMANIZED_MESSAGE);
         }
         else {

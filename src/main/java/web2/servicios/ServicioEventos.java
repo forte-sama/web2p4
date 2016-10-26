@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import web2.modelos.Evento;
 import web2.repositorios.RepositorioEvento;
 
+import java.util.List;
+
 @Service
 public class ServicioEventos {
     @Autowired
@@ -14,7 +16,7 @@ public class ServicioEventos {
         repoEventos.save(e);
     }
 
-    public Iterable<Evento> getAll() {
+    public List<Evento> getAll() {
         return repoEventos.findAll();
     }
 }

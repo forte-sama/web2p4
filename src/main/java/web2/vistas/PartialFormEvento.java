@@ -82,6 +82,12 @@ public class PartialFormEvento extends FormLayout {
             eventFeed.addBean(e);
             //notificar
             Notification.show("Evento Agregado", Notification.Type.HUMANIZED_MESSAGE);
+
+            //limpiar campos
+            titulo.setValue("");
+            descripcion.setValue("");
+            inicio.setValue(null);
+            fin.setValue(null);
         }
         else {
             Notification.show("Hubo error al agregar evento", Notification.Type.WARNING_MESSAGE);

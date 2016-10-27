@@ -9,6 +9,7 @@ public class Usuario {
     private String email;
     private String password;
     private String nombreCompleto;
+    private Long minutosPrevios;
 
     //constructors
     public Usuario() { }
@@ -33,6 +34,12 @@ public class Usuario {
     }
     public void setPassword(String password) {
         this.password = password;
+    }
+    public Long getMinutosPrevios() {
+        return minutosPrevios;
+    }
+    public void setMinutosPrevios(Long minutosPrevios) {
+        this.minutosPrevios = minutosPrevios;
     }
 
 

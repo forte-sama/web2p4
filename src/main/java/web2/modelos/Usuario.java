@@ -7,13 +7,13 @@ import javax.persistence.Id;
 public class Usuario {
     @Id
     private String email;
+    private String password;
     private String nombreCompleto;
 
     //constructors
     public Usuario() { }
 
     //custom methods
-
 
     //getters & setters
     public String getEmail() {
@@ -28,4 +28,12 @@ public class Usuario {
     public void setNombre(String nombre) {
         this.nombreCompleto = nombre;
     }
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+
 }

@@ -1,13 +1,17 @@
 package web2.vistas;
 
+import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import web2.modelos.Evento;
 import web2.servicios.ServicioEventos;
+
+import java.util.Date;
 
 @Component
 @UIScope
@@ -22,12 +26,13 @@ public class PartialFormEvento extends FormLayout {
     private DateField fin         = new DateField("Fin");
     private Button btnGuardar     = new Button("Agregar Evento");
     private Button btnSalir       = new Button("Salir");
+    private BeanItemContainer<Evento> eventFeed;
 
     public PartialFormEvento() {
         setSizeUndefined();
 
-        inicio.setResolution(Resolution.HOUR);
-        fin.setResolution(Resolution.HOUR);
+        inicio.setResolution(Resolution.MINUTE);
+        fin.setResolution(Resolution.MINUTE);
 
         titulo.setNullRepresentation("");
         titulo.setNullSettingAllowed(false);
@@ -58,7 +63,12 @@ public class PartialFormEvento extends FormLayout {
     private void guardar() {
         //chequear si choca con algun evento del dia
         //chequear fin es luego de inicio
-        if(true && true) {
+        Date i = inicio.getValue();
+        Date f = fin.getValue();
+
+        boolean noSonNulos = i != null && f != null;
+
+        if(noSonNulos && i.compareTo(f) < 0) {
             //crear objeto
             Evento e = new Evento();
             e.setCaption(titulo.getValue());
@@ -69,12 +79,12 @@ public class PartialFormEvento extends FormLayout {
             //persistir objeto
             servicioEventos.guardar(e);
             //propagar cambio
-            //setear cron job para email
+            eventFeed.addBean(e);
             //notificar
             Notification.show("Evento Agregado", Notification.Type.HUMANIZED_MESSAGE);
         }
         else {
-            Notification.show("Hubo un error", Notification.Type.WARNING_MESSAGE);
+            Notification.show("Hubo error al agregar evento", Notification.Type.WARNING_MESSAGE);
         }
     }
 
@@ -83,5 +93,9 @@ public class PartialFormEvento extends FormLayout {
         descripcion.setValue("");
 
         setVisible(false);
+    }
+
+    public void setEventFeed(BeanItemContainer<Evento> eventoFeed) {
+        this.eventFeed = eventoFeed;
     }
 }

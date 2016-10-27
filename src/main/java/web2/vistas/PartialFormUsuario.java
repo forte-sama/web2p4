@@ -16,10 +16,11 @@ public class PartialFormUsuario extends FormLayout {
     @Autowired
     private ServicioUsuarios servicioUsuarios;
 
-    private TextField email   = new TextField("Email");
-    private TextField nombre  = new TextField("Nombre");
-    private Button btnGuardar = new Button("Guardar");
-    private Button btnSalir   = new Button("Salir");
+    private TextField email    = new TextField("Email");
+    private TextField nombre   = new TextField("Nombre");
+    private PasswordField pass = new PasswordField("Password");
+    private Button btnGuardar  = new Button("Guardar");
+    private Button btnSalir    = new Button("Salir");
 
     public PartialFormUsuario() {
         setSizeUndefined();
@@ -27,12 +28,14 @@ public class PartialFormUsuario extends FormLayout {
         email.addValidator(new EmailValidator("Debe ser email valido"));
         nombre.setNullRepresentation("");
         nombre.setNullSettingAllowed(false);
+        pass.setNullRepresentation("");
+        pass.setNullSettingAllowed(false);
 
         HorizontalLayout buttons = new HorizontalLayout(btnGuardar, btnSalir);
         buttons.setSpacing(true);
 
         //Incluyendo los botones
-        addComponents(email,nombre,buttons);
+        addComponents(nombre,email,pass,buttons);
 
         btnGuardar.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         btnGuardar.addClickListener(new Button.ClickListener() {
@@ -54,11 +57,13 @@ public class PartialFormUsuario extends FormLayout {
             Usuario target = new Usuario();
             target.setEmail(email.getValue());
             target.setNombre(nombre.getValue());
+            target.setPassword(pass.getValue());
 
             servicioUsuarios.guardar(target);
 
             email.setValue("");
             nombre.setValue("");
+            pass.setValue("");
 
             Notification.show("Cambios Guardados", Notification.Type.HUMANIZED_MESSAGE);
         }
@@ -70,6 +75,7 @@ public class PartialFormUsuario extends FormLayout {
     private void salir() {
         email.setValue("");
         nombre.setValue("");
+        pass.setValue("");
 
         setVisible(false);
     }

@@ -10,6 +10,7 @@ import com.vaadin.ui.Calendar;
 import com.vaadin.ui.components.calendar.CalendarComponentEvents;
 import com.vaadin.ui.components.calendar.event.BasicEvent;
 import com.vaadin.ui.components.calendar.event.EditableCalendarEvent;
+import com.vaadin.ui.components.calendar.handler.BasicDateClickHandler;
 import com.vaadin.ui.components.calendar.handler.BasicEventMoveHandler;
 import com.vaadin.ui.components.calendar.handler.BasicEventResizeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,7 @@ import java.util.*;
 
 @SpringUI(path = "/")
 @Theme("valo")
-public class Agenda extends UI {
-    @Autowired
-    private ServicioUsuarios servicioUsuarios;
+public class AgendaUI extends UI {
     @Autowired
     private ServicioEventos servicioEventos;
     @Autowired
@@ -51,6 +50,11 @@ public class Agenda extends UI {
         agenda.setHeight("100%");
         BeanItemContainer<Evento> contenedor = new BeanItemContainer<>(Evento.class,servicioEventos.getAll());
         agenda.setContainerDataSource(contenedor);
+        agenda.setHandler(new BasicDateClickHandler() {
+            public void dateClick(CalendarComponentEvents.DateClickEvent event) {
+                ;
+            }
+        });
 
         Button btnCredenciales = new Button("Manejo Credenciales", FontAwesome.LOCK);
         btnCredenciales.addClickListener(new Button.ClickListener() {
@@ -66,6 +70,7 @@ public class Agenda extends UI {
         btnEventos.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
+                formEvento.setEventFeed(contenedor);
                 formEvento.setVisible(true);
                 //esconder form usuarios
                 formUsuario.setVisible(false);
